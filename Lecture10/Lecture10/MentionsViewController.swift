@@ -10,13 +10,11 @@ import UIKit
 
 class MentionsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource  {
     
-    @IBOutlet weak var mentionsTableView: UITableView!
+    //MARK: - Properties(Public)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        mentionsTableView.delegate = self
-        mentionsTableView.dataSource = self
-    }
+    var mentions: [Mentions] = []
+    
+    @IBOutlet weak var mentionsTableView: UITableView!
     
     var tweet: Tweet? {
         
@@ -49,8 +47,6 @@ class MentionsViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
     }
     
-    var mentions: [Mentions] = []
-    
     struct Mentions: CustomStringConvertible {
         
         var title: String
@@ -72,6 +68,8 @@ class MentionsViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
     }
     
+    //MARK: - Properties(Private)
+    
     private struct Title {
         static let images = "Images"
         static let urls = "URLs"
@@ -79,14 +77,22 @@ class MentionsViewController: UIViewController,UITableViewDelegate,UITableViewDa
         static let users = "Users"
     }
     
-    // MARK: - UITableViewDataSource
-    
     private struct Storyboard {
         static let KeywordCellReuseIdentifier = "Keyword Cell"
         static let ImageCellReuseIdentifier = "Image Cell"
         static let KeywordSegueIdentifier = "From Keyword"
         static let ImageSegueIdentifier = "Show Image"
     }
+    
+    //MARK: - Life Cycle Methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mentionsTableView.delegate = self
+        mentionsTableView.dataSource = self
+    }
+    
+    // MARK: - UITableViewDataSource
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return mentions.count
@@ -118,7 +124,6 @@ class MentionsViewController: UIViewController,UITableViewDelegate,UITableViewDa
             
             return cell
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
