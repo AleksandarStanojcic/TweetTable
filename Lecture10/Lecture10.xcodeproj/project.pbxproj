@@ -90,6 +90,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		376353CE1E895EEE0010F243 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				37D81E4A1E829E9C00236304 /* TweetViewController.swift */,
+				3789D8D71E852ED500C0E531 /* MentionsViewController.swift */,
+				376D0CA31E8807D100AC12F2 /* ImageViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		376353CF1E895F0B0010F243 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3789D8D91E85526E00C0E531 /* ImageTableViewCell.swift */,
+				3762757F1E83EC8100FD55A7 /* TweetTableViewCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		37D81E3C1E829E9B00236304 = {
 			isa = PBXGroup;
 			children = (
@@ -114,11 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				37D81E4C1E829E9C00236304 /* Main.storyboard */,
-				37D81E4A1E829E9C00236304 /* TweetViewController.swift */,
-				3762757F1E83EC8100FD55A7 /* TweetTableViewCell.swift */,
-				3789D8D71E852ED500C0E531 /* MentionsViewController.swift */,
-				3789D8D91E85526E00C0E531 /* ImageTableViewCell.swift */,
-				376D0CA31E8807D100AC12F2 /* ImageViewController.swift */,
+				376353CE1E895EEE0010F243 /* ViewControllers */,
+				376353CF1E895F0B0010F243 /* Cells */,
 				37D81E4F1E829E9C00236304 /* Assets.xcassets */,
 				37D81E511E829E9C00236304 /* LaunchScreen.storyboard */,
 				37D81E541E829E9C00236304 /* Info.plist */,

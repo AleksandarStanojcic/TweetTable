@@ -10,6 +10,8 @@ import UIKit
 
 class TweetTableViewCell: UITableViewCell {
     
+    //MARK: - Properties
+    
     @IBOutlet weak var tweetProfileImageView: UIImageView!
     @IBOutlet weak var tweetScreenNameLabel: UILabel!
     @IBOutlet weak var tweetTextLabel: UILabel!
@@ -25,11 +27,12 @@ class TweetTableViewCell: UITableViewCell {
     var urlColor = UIColor.red
     var userMentionsColor = UIColor.green
     
-    func updateUI() {
+    //MARK: - Private API
+    
+    private func updateUI() {
         tweetTextLabel?.attributedText = nil
         tweetScreenNameLabel?.text = nil
         tweetProfileImageView?.image = nil
-        //tweetCreatedLabel?.text = nil
         
         if let tweet = self.tweet {
             var text = tweet.text
@@ -50,20 +53,20 @@ class TweetTableViewCell: UITableViewCell {
             if let profileImageURL = tweet.user.profileImageURL {
                 if let imageData = NSData(contentsOf: profileImageURL as URL) {
                     tweetProfileImageView?.image = UIImage(data: imageData as Data)
-                 }
-             }
+                }
+            }
             
-         }
-     }
- }
+        }
+    }
+}
 
- // MARK: - Extensions
+// MARK: - Extensions
 
- private extension NSMutableAttributedString {
+private extension NSMutableAttributedString {
     
     func changeKeywordsColor(keywords: [Mention], color: UIColor) {
         for keyword in keywords {
             addAttribute(NSForegroundColorAttributeName, value: color, range: keyword.nsrange)
-         }
-     }
- }
+        }
+    }
+}

@@ -10,13 +10,17 @@ import UIKit
 
 class ImageTableViewCell: UITableViewCell {
     
+    //MARK: - Properties
+    
     @IBOutlet weak var tweetImage: UIImageView!
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     var imageUrl: NSURL? { didSet { updateUI() } }
     
-    func updateUI() {
+    //MARK: - Private API
+    
+    private func updateUI() {
         if let url = imageUrl {
             spinner?.startAnimating()
             DispatchQueue.global(qos: .userInitiated).async {

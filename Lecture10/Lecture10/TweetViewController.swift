@@ -9,8 +9,37 @@
 import UIKit
 
 class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate  {
-  
+    
+    // MARK: - Properties (Public)
+    
     var tweets = [[Tweet]]()
+    var searchText: String? = "#stanford" {
+        
+        didSet {
+            searchTextField?.text = searchText
+            tweets.removeAll()
+            refresh()
+        }
+    }
+    
+    @IBOutlet weak var searchTextField: UITextField!{
+        
+        didSet {
+            searchTextField.delegate = self
+            searchTextField.text = searchText
+        }
+    }
+    
+    @IBOutlet weak var tweetTableView: UITableView!
+    
+    //MARK: - Properties (Private)
+    
+    private struct StoryBoard {
+        static let CellIdentifier = "Tweet"
+        static let MentionsIdentifier = "Show Mentions"
+    }
+    
+    // MARK: - Life Cycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,18 +50,9 @@ class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         refresh()
     }
     
-    var searchText: String? = "#stanford" {
-        
-        didSet {
-            searchTextField?.text = searchText
-            tweets.removeAll()
-            refresh()
-        }
-    }
+    // MARK: - Private API
     
-    @IBOutlet weak var tweetTableView: UITableView!
-    
-    func refresh() {
+    private func refresh() {
         
         if searchText != nil {
             let request = Request(search: searchText!, count: 100)
@@ -48,21 +68,9 @@ class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         }
     }
     
-    private struct StoryBoard {
-       static let CellIdentifier = "Tweet"
-       static let MentionsIdentifier = "Show Mentions"
-    }
+    // MARK: - UITextFieldDelegate
     
-    @IBOutlet weak var searchTextField: UITextField!{
-        
-        didSet {
-            searchTextField.delegate = self
-            searchTextField.text = searchText
-        }
-    }
-    
-    
-     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if textField == searchTextField {
             textField.resignFirstResponder()
@@ -70,7 +78,9 @@ class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         }
         return true
     }
-
+    
+    // MARK: - UITableViewDataSource
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return tweets.count
     }
@@ -80,15 +90,16 @@ class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let cellIdentifier = "Cell"
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: StoryBoard.CellIdentifier, for : indexPath as IndexPath) as! TweetTableViewCell
-        //print(tweets)
-       
+        
         cell.tweet = tweets[indexPath.section][indexPath.row]
         
         
         return cell
     }
+    
+    // MARK: - Navigation
     
     func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
         if identifier == StoryBoard.MentionsIdentifier {
@@ -101,7 +112,7 @@ class TweetViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         return true
     }
     
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier {
             if identifier == StoryBoard.MentionsIdentifier {
                 if let mtvc = segue.destination as? MentionsViewController {

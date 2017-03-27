@@ -9,50 +9,30 @@
 import UIKit
 
 class ImageViewController: UIViewController,UIScrollViewDelegate {
-
-    @IBOutlet weak var scrollView: UIScrollView! {
-        
-        didSet {
-        scrollView.contentSize  = imageView.frame.size
-        scrollView.delegate = self
-        scrollView.minimumZoomScale = 0.03
-        scrollView.maximumZoomScale = 5.0
-                
-        }
-   }
-
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    //MARK: - Properties(Public)
     
     var imageURL: NSURL? {
         didSet {
             image = nil
             fetchImage()
             spinner?.startAnimating()
-            
         }
     }
     
-    func fetchImage() {
-         spinner?.startAnimating()
-        if let url = imageURL {
-            spinner?.startAnimating()
-            DispatchQueue.global(qos: .userInitiated).async { // 1
-                let loadedImageData = NSData(contentsOf: url as URL)
-                DispatchQueue.main.async { // 2
-                    if url == self.imageURL {
-                        if let imageData = loadedImageData {
-                            self.image = UIImage(data: imageData as Data)
-                            //self.spinner?.stopAnimating()
-                        } else {
-                            self.image = nil
-                        }
-                        
-                    }
-                }
-            }
+    @IBOutlet weak var scrollView: UIScrollView! {
+        
+        didSet {
+            scrollView.contentSize  = imageView.frame.size
+            scrollView.delegate = self
+            scrollView.minimumZoomScale = 0.03
+            scrollView.maximumZoomScale = 5.0
         }
-
     }
+    
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    //MARK: - Properties(Private)
     
     private var imageView = UIImageView()
     
@@ -70,16 +50,46 @@ class ImageViewController: UIViewController,UIScrollViewDelegate {
     
     private var scrollViewDidScrollOrZoom = false
     
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-         return imageView
+    //MARK: - Life Cycle Methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        scrollView.addSubview(imageView)
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollViewDidScrollOrZoom = true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if image == nil {
+            fetchImage()
+        }
     }
     
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-         scrollViewDidScrollOrZoom = true
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        autoScale()
+    }
+    
+    //MARK: Private API
+    
+    private func fetchImage() {
+        spinner?.startAnimating()
+        if let url = imageURL {
+            spinner?.startAnimating()
+            DispatchQueue.global(qos: .userInitiated).async { // 1
+                let loadedImageData = NSData(contentsOf: url as URL)
+                DispatchQueue.main.async { // 2
+                    if url == self.imageURL {
+                        if let imageData = loadedImageData {
+                            self.image = UIImage(data: imageData as Data)
+                        } else {
+                            self.image = nil
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
     }
     
     private func autoScale() {
@@ -96,21 +106,18 @@ class ImageViewController: UIViewController,UIScrollViewDelegate {
             }
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        scrollView.addSubview(imageView)
+    
+    //MARK: - ScrollViewDelegate
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if image == nil {
-            fetchImage()
-        }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollViewDidScrollOrZoom = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        autoScale()
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        scrollViewDidScrollOrZoom = true
     }
 }
